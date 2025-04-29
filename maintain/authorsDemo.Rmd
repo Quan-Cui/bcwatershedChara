@@ -15,6 +15,8 @@ Search for "Administrative Boundaries" on the [metrovancouver open data portal](
 ```{r}
 library(tidyverse)
 library(sf)
+library(DBI)
+library(RSQLite)
 lowerMainland <- st_transform(read_sf("maintain/authorDemo_Lowermainland_Boundaries/Administrative_Boundaries.shp", stringsAsFactors = FALSE), crs = 4326)
 load("data/mapdata_hydat.RDa")
 load("data/mapdata_watershed.RDa")
@@ -31,8 +33,48 @@ Strmrdr4df <- Strmrdr_4 %>%
 save(Strmrdr_4, Strmrdr4df, file = "data/mapdata_watershed.RDa")
 
 hydattable <- hydattable %>% filter(latitude <= st_bbox(Strmrdr_4)["ymax"],
-                                    between(longitude, -123.8, -122.4))
+                                    between(longitude, -123.6, -122.4))
 save(hydattable, file = "data/mapdata_hydat.RDa") 
+
+# copy Hydat.sqlite3 to maintain folder
+full_db <- "maintain/HYDAT.sqlite3"
+reduced_db <- "maintain/HYDAT_small.sqlite3"
+station_list <- unique(hydattable$station_number)
+start_date <- as.Date("1990-01-01")
+end_date <- as.Date("2025-04-30")
+con_full <- dbConnect(SQLite(), full_db)
+con_small <- dbConnect(SQLite(), reduced_db)
+
+copy_filtered_table <- function(table_name, filter_expr = NULL) {
+  if (!dbExistsTable(con_full, table_name)) return()
+  
+  message("Processing table: ", table_name)
+  df <- dbReadTable(con_full, table_name)
+  
+  if ("STATION_NUMBER" %in% colnames(df)) {
+    df <- df %>% filter(STATION_NUMBER %in% station_list)
+  }
+  
+  if ("Date" %in% colnames(df)) {
+    df <- df %>% filter(between(as.Date(Date), start_date, end_date))
+  }
+  
+  dbWriteTable(con_small, table_name, df, overwrite = TRUE)
+}
+
+tables_to_copy <- c(
+  "STATIONS", "DLY_FLOWS", "DLY_FLAGS", "STN_DATA_RANGE"
+)
+
+for (tbl in tables_to_copy) {
+  copy_filtered_table(tbl)
+}
+
+# Disconnect
+dbDisconnect(con_full)
+dbDisconnect(con_small)
+# tidyhydat::hy_set_default_db("maintain/HYDAT_small.sqlite3") # this in app
+
 
 ```
 

@@ -30,10 +30,12 @@ library(shinycssloaders)
 library(shinyjs)
 library(shinythemes)
 library(DT)
+library(tidyhydat)
 
 # how to add GIS data is explained in maintain folder
 load("data/mapdata_watershed.RDa")
 load("data/mapdata_hydat.RDa") 
+tidyhydat::hy_set_default_db("maintain/HYDAT_small.sqlite3") # new in author's demo
 
 # 2 Define UI -----------------------------------------------------------------
 ui <- navbarPage(id = "menus", theme = "bcgov.css",
@@ -365,7 +367,7 @@ server <- function(input, output, session) {
         req(reactive_objects$station_number)
         ggplotly(plot_flow_data(station_number = reactive_objects$station_number,
                        start_date = "1900-01-01",
-                       end_date = "2021-12-31",
+                       end_date = "2025-04-30",
                        include_title = TRUE)$Daily_Flows)
     })
 
