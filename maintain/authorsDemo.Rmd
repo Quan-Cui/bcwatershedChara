@@ -1,0 +1,39 @@
+---
+title: "Maintain the author's demo version"
+output: html_notebook
+---
+
+To maintain the author's demo version, please follow the steps described in this file after you run steps from **How-to-maintain-this-app.html**.
+  
+The purpose of this maintain file is to narrow down the area of data to lower mainland BC, instead of entire BC for a demo purpose.  
+
+
+### Working steps 
+
+Search for "Administrative Boundaries" on the [metrovancouver open data portal](https://open-data-portal-metrovancouver.hub.arcgis.com/datasets/1c86f57d9fcc4fc3a8134328b07f07e6_10/explore ).
+
+```{r}
+library(tidyverse)
+library(sf)
+lowerMainland <- st_transform(read_sf("maintain/authorDemo_Lowermainland_Boundaries/Administrative_Boundaries.shp", stringsAsFactors = FALSE), crs = 4326)
+load("data/mapdata_hydat.RDa")
+load("data/mapdata_watershed.RDa")
+
+Strmrdr_4 <- st_intersection(Strmrdr_4, lowerMainland)
+Strmrdr_4 <- st_collection_extract(Strmrdr_4, "POLYGON") 
+ggplot() +
+  geom_sf(data = Strmrdr_4, fill = "blue", alpha = 0.5) +
+  geom_sf(data = lowerMainland, fill = NA, color = "red") 
+Strmrdr4df <- Strmrdr_4 %>%
+              st_drop_geometry() %>%
+              select(-c(NMDWTRSHDD, BLLNK, FWWTRSHDCD, OBJECTID, FEAT_LEN)) %>%
+              as.data.frame()
+save(Strmrdr_4, Strmrdr4df, file = "data/mapdata_watershed.RDa")
+
+hydattable <- hydattable %>% filter(latitude <= st_bbox(Strmrdr_4)["ymax"],
+                                    between(longitude, -123.8, -122.4))
+save(hydattable, file = "data/mapdata_hydat.RDa") 
+
+```
+
+

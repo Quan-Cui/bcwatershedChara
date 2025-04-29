@@ -20,7 +20,6 @@ library(leaflet)
 library(leaflet.extras)
 library(plotly)
 library(raster)
-#library(rgdal) # retire in 2023
 library(sf)
 library(sp)
 library(terra)
@@ -195,11 +194,14 @@ server <- function(input, output, session) {
     ### 3.1.1 map -------------------------------------------------------------
     output$map <- leaflet::renderLeaflet({
                     leaflet() %>% 
-                    setView(lng = -122.5,
-                            lat = 51.5,
-                            zoom = 6) %>%
-                    setMaxBounds(lng1 = -113, lat1 = 60.5,
-                                 lng2 = -141, lat2 = 47.8) %>%  
+                    setView(#lng = -122.5,
+                            #lat = 51.5,
+                            lng = -122.7,
+                            lat = 49.2,
+                            zoom = 10) %>%
+                    #       zoom = 6) %>%
+                    # setMaxBounds(lng1 = -113, lat1 = 60.5,
+                    #              lng2 = -141, lat2 = 47.8) %>%  
                     addProviderTiles(providers$OpenTopoMap, group='Topographic') %>%
                     addTiles(group = 'Basic map') %>%
                     addGraticule(interval = 1, style = list(color = 'lightgrey', weight = 0.5)) %>%
