@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![img](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)   
-[![ShinyApp](https://img.shields.io/badge/ShinyApp-Launch-blue?logo=R)](https://zsnv7j-quan-cui.shinyapps.io/BCWatershedCharacterization/)
+[![img](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
+[![ShinyApp](https://img.shields.io/badge/ShinyApp-Launch-blue?logo=R)](https://zsnv7j-quan-cui.shinyapps.io/BCWatershedCharacterization/)   
   
 # BC Watershed Characterization 
 
@@ -11,11 +11,11 @@
 ### Author's demo version
 
 
-This repository hosted on https://github.com/Quan-Cui/bcwatershedChara is an author's demo version. For the official version, please see the original repository at https://github.com/HatfieldConsultants/bcwatershedChara.
+This repository hosted here is an author's demo version. For the official version, please see the original repository.
 
 This author's demo version changed:
 
-  1.  Removed r package [renv](https://rstudio.github.io/renv/articles/renv.html)  
+  1.  Removed r package renv. 
   2.  Narrowed down the map's area to lower mainland to reduce the size of data. Original app's data covers entire British Columbia.  
   3.  Data were updated to a shapshot from 2025 April.  
 
