@@ -3,7 +3,7 @@
   
 bcwatershedChara
 ============================
-### AUthor's demo version
+### Author's demo version
 
 This repository hosted on https://github.com/Quan-Cui/bcwatershedChara is an author's demo version. For the official version, please see the original repository at https://github.com/HatfieldConsultants/bcwatershedChara.
 
@@ -13,7 +13,7 @@ This author's demo version changed:
   2.  Narrowed down the map's area to lower mainland to reduce the size of data. Original app's data covers entire British Columbia.  
   3.  Data were updated to a shapshot from 2025 April.  
 
-
+============================
 ### Usage
 
   This is an [R application](https://shiny.rstudio.com/) for British Columbia Watershed Characterization. Follow these steps to install and initialize this application:  
